@@ -31,16 +31,6 @@ UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに�
 2. 表示されるドライブ一覧から対象のドライブ番号を入力
 3. 確認プロンプトで `yes` と入力して実行
 
-```
-=== UASP SSD Full TRIM Tool ===
-
-Available drives:
-  [0] Sa**ung SSD 980 PRO - 1.0 TB
-  [1] JM**ron Tech - 512.0 GB
-
-Enter drive number to TRIM (or 'q' to quit): 1
-```
-
 ## 制約
 
 - UASP経由のSSD限定で使用できます。内蔵SSD(M.2やSATA直結)は別のツールを使ってください。
