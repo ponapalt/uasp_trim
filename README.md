@@ -2,6 +2,8 @@
 
 UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに対して、全域TRIMコマンド（SCSI UNMAP）を発行するWindows用ツールです。
 
+!["UASP SSD Full Trim Tool Screenshot"]("uasp_trim_screenshot.png")
+
 ## 概要
 
 本ツールはSSD全域を対象としたSCSI UNMAPコマンドを、**UASP対応のUSB-SSD変換アダプタ経由**で直接発行することで、簡易的なSSDの"リセット"を行う目的のものです。
@@ -23,10 +25,6 @@ UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに�
 - 管理者権限
 - UASP対応のUSB-SSD変換アダプタ
 
-## ビルド方法
-
-build.batを実行してください。
-
 ## 使用方法
 
 1. `uasp_trim.exe` を実行
@@ -42,6 +40,10 @@ Available drives:
 
 Enter drive number to TRIM (or 'q' to quit): 1
 ```
+
+## ビルド方法
+
+新しめのVisual Studioをインストールした状態で、build.batを実行してください。
 
 ## 技術詳細
 
