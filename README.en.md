@@ -1,4 +1,4 @@
-# UASP SSD Full TRIM Tool for Windows
+# UASP SSD Full TRIM(SCSI UNMAP) Tool for Windows
 
 [日本語版 README はこちら](README.md)
 
