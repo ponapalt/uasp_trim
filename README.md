@@ -1,4 +1,4 @@
-# UASP SSD Full TRIM Tool
+# UASP SSD Full TRIM Tool for Windows
 
 [English README is available here](README.en.md)
 
