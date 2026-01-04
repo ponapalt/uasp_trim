@@ -1,5 +1,7 @@
 # UASP SSD Full TRIM Tool
 
+[English README is available here](README.en.md)
+
 UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに対して、全域TRIMコマンド（SCSI UNMAP）を発行するWindows用ツールです。
 
 ![UASP SSD Full Trim Tool Screenshot](uasp_trim_screenshot.png)
