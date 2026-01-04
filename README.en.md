@@ -33,16 +33,6 @@ Please verify the following before use:
 2. Enter the drive number from the displayed drive list
 3. Type `yes` at the confirmation prompt to execute
 
-```
-=== UASP SSD Full TRIM Tool ===
-
-Available drives:
-  [0] Sa**ung SSD 980 PRO - 1.0 TB
-  [1] JM**ron Tech - 512.0 GB
-
-Enter drive number to TRIM (or 'q' to quit): 1
-```
-
 ## Limitations
 
 - Only works with SSDs via UASP. For internal SSDs (M.2 or direct SATA), please use other tools.
