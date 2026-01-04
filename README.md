@@ -41,6 +41,11 @@ Available drives:
 Enter drive number to TRIM (or 'q' to quit): 1
 ```
 
+## 制約
+
+- UASP経由のSSD限定で使用できます。内蔵SSD(M.2やSATA直結)は別のツールを使ってください。
+- 何かファイルを開いていたりエクスプローラで中を見ていたりするドライブに対してTRIMを実行した場合、何かおかしなことが起きるかもしれません。
+
 ## ビルド方法
 
 新しめのVisual Studioをインストールした状態で、build.batを実行してください。
