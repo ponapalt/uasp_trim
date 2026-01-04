@@ -38,6 +38,7 @@ struct DriveInfo {
     ULONGLONG sizeBytes;
     bool available;
     bool isSystemDrive;
+    BYTE busType;
 };
 
 // Check if running as administrator
@@ -70,8 +71,31 @@ void FormatSize(ULONGLONG bytes, char* buffer, size_t bufSize) {
     snprintf(buffer, bufSize, "%.1f %s", size, units[unitIndex]);
 }
 
+// Get bus type name from STORAGE_BUS_TYPE value
+const char* GetBusTypeName(BYTE busType) {
+    switch (busType) {
+        case 0x01: return "SCSI";
+        case 0x02: return "ATAPI";
+        case 0x03: return "ATA";
+        case 0x04: return "1394";
+        case 0x05: return "SSA";
+        case 0x06: return "Fibre";
+        case 0x07: return "USB";
+        case 0x08: return "RAID";
+        case 0x09: return "iSCSI";
+        case 0x0A: return "SAS";
+        case 0x0B: return "SATA";
+        case 0x0E: return "SD";
+        case 0x0F: return "MMC";
+        case 0x10: return "Virtual";
+        case 0x11: return "NVMe";
+        case 0x12: return "Spaces";
+        default: return "Unknown";
+    }
+}
+
 // Get device model name using STORAGE_PROPERTY_QUERY
-bool GetDeviceModel(HANDLE hDevice, char* model, size_t modelSize) {
+bool GetDeviceModel(HANDLE hDevice, char* model, size_t modelSize, BYTE* busType) {
     STORAGE_PROPERTY_QUERY query = {0};
     query.PropertyId = StorageDeviceProperty;
     query.QueryType = PropertyStandardQuery;
@@ -83,10 +107,16 @@ bool GetDeviceModel(HANDLE hDevice, char* model, size_t modelSize) {
         &query, sizeof(query), buffer, sizeof(buffer),
         &bytesReturned, NULL)) {
         strncpy(model, "(Unknown)", modelSize);
+        if (busType) *busType = 0;
         return false;
     }
 
     STORAGE_DEVICE_DESCRIPTOR* desc = (STORAGE_DEVICE_DESCRIPTOR*)buffer;
+
+    // Get bus type
+    if (busType) {
+        *busType = (BYTE)desc->BusType;
+    }
 
     // Build model string from vendor and product
     char vendor[128] = {0};
@@ -194,7 +224,7 @@ int EnumerateDrives(DriveInfo* drives, int maxDrives) {
         drives[count].available = true;
         drives[count].isSystemDrive = (i == systemDriveNum);
 
-        GetDeviceModel(hDevice, drives[count].model, sizeof(drives[count].model));
+        GetDeviceModel(hDevice, drives[count].model, sizeof(drives[count].model), &drives[count].busType);
         GetDiskSize(hDevice, &drives[count].sizeBytes);
 
         CloseHandle(hDevice);
@@ -499,7 +529,7 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_ALL, "");
 
-    printf("=== UASP SSD Full TRIM Tool ===\n\n");
+    printf("=== UASP SSD Full TRIM(SCSI UNMAP) Tool ===\n\n");
 
     // Check admin privileges
     if (!IsRunAsAdmin()) {
@@ -529,13 +559,14 @@ int main() {
     for (int i = 0; i < driveCount; i++) {
         char sizeStr[32];
         FormatSize(drives[i].sizeBytes, sizeStr, sizeof(sizeStr));
+        const char* busTypeName = GetBusTypeName(drives[i].busType);
         if (drives[i].isSystemDrive) {
             SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-            printf("  [%d] %s - %s [SYSTEM DRIVE - Windows]\n",
-                drives[i].driveNumber, drives[i].model, sizeStr);
+            printf("  [%d] %s - %s (%s) [SYSTEM DRIVE - Windows]\n",
+                drives[i].driveNumber, drives[i].model, sizeStr, busTypeName);
             SetConsoleTextAttribute(hConsole, originalAttrs);
         } else {
-            printf("  [%d] %s - %s\n", drives[i].driveNumber, drives[i].model, sizeStr);
+            printf("  [%d] %s - %s (%s)\n", drives[i].driveNumber, drives[i].model, sizeStr, busTypeName);
         }
     }
     printf("\n");
@@ -595,7 +626,7 @@ int main() {
     SetConsoleTextAttribute(hConsole, originalAttrs);
 
     printf("\n");
-    printf("This operation will send a TRIM command to the entire drive.\n");
+    printf("This operation will send a TRIM/SCSI UNMAP command to the entire drive.\n");
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
     printf("Data recovery will be IMPOSSIBLE after this operation.\n");
     SetConsoleTextAttribute(hConsole, originalAttrs);
