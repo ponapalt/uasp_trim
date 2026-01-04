@@ -10,6 +10,8 @@ UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに�
 
 本ツールはSSD全域を対象としたSCSI UNMAPコマンドを、**UASP対応のUSB-SSD変換アダプタ経由**で直接発行することで、簡易的なSSDの"リセット"を行う目的のものです。
 
+パフォーマンスが悪化したSSDの速度回復や、厳重な秘匿が必要なデータが入っていないSSDの廃棄準備などに使えると思います。
+
 ## 警告
 
 このツールはディスク全体にTRIMを発行します。**実行後のデータ復旧は通常のツールでは不可能です。**
@@ -32,16 +34,6 @@ UASP（USB Attached SCSI Protocol）経由で接続されたUSB外付けSSDに�
 1. `uasp_trim.exe` を実行
 2. 表示されるドライブ一覧から対象のドライブ番号を入力
 3. 確認プロンプトで `yes` と入力して実行
-
-```
-=== UASP SSD Full TRIM Tool ===
-
-Available drives:
-  [0] Sa**ung SSD 980 PRO - 1.0 TB
-  [1] JM**ron Tech - 512.0 GB
-
-Enter drive number to TRIM (or 'q' to quit): 1
-```
 
 ## 制約
 
